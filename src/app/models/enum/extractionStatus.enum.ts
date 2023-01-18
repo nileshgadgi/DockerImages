@@ -1,0 +1,5 @@
+export enum ExtractionStatus {
+  FINISHED='FINISHED',
+  WAITING='WAITING',
+  PROCESSING='PROCESSING'
+}

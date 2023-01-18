@@ -1,0 +1,270 @@
+<div class="row">
+  <div class="col-md-3">
+      <div class="hpanel panel-group">
+          <div class="panel-body">
+              <div class="text-center text-muted font-bold">Search table or add new one</div>
+          </div>
+          <div class="panel-section">
+
+              <div class="input-group">
+                  <span class="input-group-addon"><input type="checkbox"  data-toggle="tooltip" title="Static ones?" [(ngModel)]="justStaticOnes"></span>
+                  <input type="text" class="form-control" placeholder="Search Table"  [(ngModel)]="searchValue">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" (click)="search()"><i class="fa fa-search"></i></button>
+                  </span>
+              </div>
+              <button type="button" data-toggle="collapse" data-target="#notes"
+                      class="btn-sm visible-xs visible-sm collapsed btn-default btn btn-block m-t-sm">
+                  All tables <i class="fa fa-angle-down"></i>
+              </button>
+          </div>
+
+          <div id="notes" class="collapse">
+            <div class="panel-body note-link"  [class.hidden]="isNotPossibleToAddNewTable">
+              <a (click)="addTable()" data-toggle="tab">
+                    <h5>Add new table</h5>
+              </a>
+            </div>
+            <div class="panel-body note-link" *ngFor="let table of tables;">
+                  <a (click)="chooseTable(table)" data-toggle="tab">
+                    <!-- <small class="pull-right text-muted">26.10.2016</small> -->
+                        <h5>{{table.tabname}}</h5>
+                    <!-- <div class="small">
+                        Many desktop publishing packages and web page editors now use Lorem
+                    </div> -->
+                  </a>
+            </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-9">
+      <div class="hpanel">
+
+          <div class="panel-body">
+
+              <div class="text-center " [class.hidden]="generalDetails.length>0">
+                  We couldn't find any field on this table for you.
+              </div>
+
+              <div class="tab-content" *ngIf="generalDetails.length>0">
+                  <div class="tab-pane active">
+                      <!-- <div class="pull-right text-muted m-l-lg">
+                          26.10.2016
+                      </div> -->
+                      <h3>{{table.tabname}} Fields</h3>
+                      <hr/>
+                      <div class="note-content">
+                        <div class="table-responsive project-list" class="col-md-6">
+                          <div class="row">
+                            <div class="col-lg-12">
+                                <div class="hpanel">
+                                    <div>
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" placeholder="Search fields.."  [(ngModel)]="searchValueSelected">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" (click)="searchSelected()"><i class="fa fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <table class="table table-striped">
+                              <thead>
+                              <tr>
+                                  <th colspan="2">Field Name</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr *ngFor="let field of detailsSelected;" >
+                                  <td><input type="checkbox" class="i-checks" [checked]="field.isChecked"
+                                    [(ngModel)]="field.isChecked"
+                                    (click)="checkEvent(field.isChecked, field)"></td>
+                                  <td>{{field.fieldname}}
+                                      <br/>
+                                      <small *ngIf="field.datatype!=''">Data type ({{field.datatype}})</small>
+                                  </td>
+                                  <td>
+                                      <a href="#" class="btn btn-xs btn-default" data-toggle="modal" data-target="#whereModal">Where Clause</a>
+                                      <a href="#" class="btn btn-xs btn-default" data-toggle="modal" data-target="#joinModal">Join Clause</a>
+                                  </td>
+                              </tr>
+                              </tbody>
+                          </table>
+                        </div>
+                        </div>
+
+                        <div class="table-responsive project-list" class="col-md-6">
+                            <div class="row">
+                              <div class="col-lg-12">
+                                  <div class="hpanel">
+                                      <div>
+                                          <div class="input-group">
+                                              <input class="form-control" type="text" placeholder="Search fields.." [(ngModel)]="searchValueNoSelected">
+                                              <div class="input-group-btn">
+                                                  <button class="btn btn-default" (click)="searchNoSelected()"><i class="fa fa-search" ></i></button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">Field Name</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let field of details;" >
+                                    <td><input type="checkbox" class="i-checks" [checked]="field.isChecked"
+                                      [(ngModel)]="field.isChecked"
+                                      (click)="checkEvent(field.isChecked, field)"></td>
+                                    <td>{{field.fieldname}}
+                                        <br/>
+                                        <small *ngIf="field.datatype!=''">Data type ({{field.datatype}})</small>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-default" (click)="saveChanges()"><i class="fa fa-save"></i> Save Changes</button>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="whereModal" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="color-line"></div>
+          <div class="modal-header">
+              <h4 class="modal-title">Create Where Clause</h4>
+              <!-- <small class="font-bold">Lorem Ipsum is simply dummy text.</small> -->
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                  <th>Field Name</th>
+                  <th>Action</th>
+                  <th>Value</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let field of whereClauseItems;" >
+                  <td>{{field.fieldname}}
+                  </td>
+                  <td>
+                    <div class="col-sm-10">
+                      <select
+                        class="form-control m-b"
+                        name="actions"
+                        id="actions"
+                        [(ngModel)]="field.action"
+                      >
+                        <option *ngFor="let action of actions">{{action}}</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="value"
+                        id="value"
+                        placeholder="value"
+                        [(ngModel)]="field.value"
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="col-sm-10">
+                      <button class="btn btn-sm btn-default" (click)="createNewWhereClauseItem(field)"><i class="fa fa-plus"></i> Create new one</button>
+                    </div>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-sm btn-default" (click)="saveWhereClause()"><i class="fa fa-save"></i> Save Changes</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="joinModal" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="color-line"></div>
+          <div class="modal-header">
+              <h4 class="modal-title">Create Join Clause</h4>
+              <!-- <small class="font-bold">Lorem Ipsum is simply dummy text.</small> -->
+          </div>
+          <div class="modal-body">
+             <table class="table table-striped">
+              <thead>
+              <tr>
+                  <th>Field Name</th>
+                  <th>Join Action</th>
+                  <th>Template</th>
+                  <th>Field Name</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let field of joinClauseItems;" >
+                  <td>{{field.fieldname}}
+                  </td>
+                  <td>
+                    <div class="col-sm-10">
+                      <select
+                        class="form-control m-b"
+                        name="joinActions"
+                        id="joinActions"
+                        [(ngModel)]="field.action"
+                      >
+                        <option *ngFor="let action of joinActions">{{action}}</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="col-sm-10">
+                      <select
+                        class="form-control m-b"
+                        name="templates"
+                        id="templates"
+                        [(ngModel)]="field.sapTableDetailCustomerId"
+                      >
+                        <option *ngFor="let sapTableCustomer of sapTableCustomerList">{{sapTableCustomer.tabname}}</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="col-sm-10">
+                      <button class="btn btn-sm btn-default" (click)="createNewJoinClauseItem(field)"><i class="fa fa-plus"></i> Create new one</button>
+                    </div>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-sm btn-default" (click)="saveJoinClause()"><i class="fa fa-save"></i> Save Changes</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
